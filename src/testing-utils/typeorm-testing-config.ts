@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from '../user/user.entity/user.entity';
+import { UserEntity } from '../user/user.entity';
 
 export const TypeOrmTestingConfig = () => [
   TypeOrmModule.forRoot({
