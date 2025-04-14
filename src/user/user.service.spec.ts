@@ -6,23 +6,23 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity/user.entity';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 
 import { faker } from '@faker-js/faker'; // Changed this line
 import { TypeOrmTestingConfig } from '../testing-utils/typeorm-testing-config';
 
-describe('UsersService', () => {
-  let service: UsersService;
+describe('UserService', () => {
+  let service: UserService;
   let repository: Repository<UserEntity>;
   let usersList: UserEntity[];
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [...TypeOrmTestingConfig()],
-      providers: [UsersService],
+      providers: [UserService],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
+    service = module.get<UserService>(UserService);
     repository = module.get<Repository<UserEntity>>(
       getRepositoryToken(UserEntity),
     );
