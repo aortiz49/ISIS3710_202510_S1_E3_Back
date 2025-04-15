@@ -5,7 +5,7 @@ import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 
 import { faker } from '@faker-js/faker'; // Changed this line
-import { TypeOrmTestingConfig } from '../testing-utils/typeorm-testing-config';
+import { TypeOrmTestingConfig } from 'src/testing-utils/typeorm-testing-config';
 
 describe('UserService', () => {
   let service: UserService;

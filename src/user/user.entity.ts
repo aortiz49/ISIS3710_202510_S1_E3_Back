@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import * as bcrypt from 'bcrypt';
-import { BaseEntity } from '../base-entity';
+import { BaseEntity } from 'src/base-entity';
 import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 
 @Entity('users')
