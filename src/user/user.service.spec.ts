@@ -38,6 +38,14 @@ describe('UserService', () => {
         description: faker.lorem.sentence(),
         address: faker.location.streetAddress(),
         city: faker.location.city(),
+        created_at: faker.date.past(),
+        updated_at: new Date(),
+        last_seen_at: new Date(),
+        phone_number: faker.phone.number(),
+        admin: Math.random() < 0.5,
+        service_provider: Math.random() < 0.5,
+        password: faker.internet.password(),
+        email: faker.internet.email(),
       });
       usersList.push(user);
     }
@@ -71,7 +79,7 @@ describe('UserService', () => {
   });
 
   it('create should return a new user', async () => {
-    const user: UserEntity = {
+    const user: Partial<UserEntity> = {
       id: '',
       name: faker.person.fullName(),
       description: faker.lorem.sentence(),
@@ -83,6 +91,8 @@ describe('UserService', () => {
       phone_number: faker.phone.number(),
       admin: Math.random() < 0.5,
       service_provider: Math.random() < 0.5,
+      password: faker.internet.password(),
+      email: faker.internet.email(),
     };
 
     const newUser: UserEntity = await service.create(user);
@@ -115,11 +125,13 @@ describe('UserService', () => {
   });
 
   it('update should throw an exception for an invalid user', async () => {
-    let user: UserEntity = usersList[0];
+    let user: Partial<UserEntity> = usersList[0];
     user = {
       ...user,
       name: 'New name',
       address: 'New address',
+      password: 'password123',
+      email: 'newemail@email.com',
     };
     await expect(() => service.update('0', user)).rejects.toHaveProperty(
       'message',
