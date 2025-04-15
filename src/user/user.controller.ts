@@ -7,7 +7,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  Logger,
   Param,
   Post,
   Put,
@@ -36,25 +35,17 @@ export class UserController {
 
   @Post()
   async create(@Body() userDto: UserDto) {
-    const logger = new Logger('UserController'); // Logger for debugging
-
     const user: UserEntity = plainToInstance(UserEntity, userDto);
-    logger.error('User HELLOOOOOOO', user);
 
     return await this.userService.create(user);
   }
 
   @Put(':userId')
   async updateUser(@Param('userId') id: string, @Body() userDto: UserDto) {
-    const logger = new Logger('UserController'); // Logger for debugging
-
     const existingUser = await this.userService.findOne(id);
     if (!existingUser) {
-      logger.error('User not found for id:', id);
       throw new Error('User not found');
     }
-
-    logger.debug('Existing user:', existingUser);
 
     // Only update the fields that are provided in the userDto
     // Update the existing user with the provided fields, keeping the rest intact
