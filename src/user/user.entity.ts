@@ -7,7 +7,10 @@ export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: true })
+  @Column({
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   last_seen_at: Date;
 
   @Column()
