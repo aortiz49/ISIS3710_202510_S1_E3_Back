@@ -19,9 +19,12 @@ export class UserEntity extends BaseEntity {
   @Column()
   description: string;
 
+  @Column({ nullable: true })
+  city: string;
+
   @Column()
   address: string;
 
-  @Column({ nullable: true })
-  city: string;
+  @Column({ default: false })
+  admin: boolean;
 }
