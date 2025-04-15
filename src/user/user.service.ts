@@ -6,6 +6,7 @@ import {
   BusinessError,
   BusinessLogicException,
 } from '../shared/errors/business-errors';
+import { UserDto } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -34,17 +35,21 @@ export class UserService {
     const newUser = this.userRepository.create(user);
     return await this.userRepository.save(newUser);
   }
-  async update(id: string, user: UserEntity): Promise<UserEntity> {
+
+  async update(id: string, user: UserDto): Promise<UserEntity> {
     const persistedUser = await this.userRepository.findOne({
       where: { id },
     });
-    if (!persistedUser)
+
+    if (!persistedUser) {
       throw new BusinessLogicException(
         'The user with the given id was not found',
         BusinessError.NOT_FOUND,
       );
+    }
 
-    return await this.userRepository.save({ ...persistedUser, ...user });
+    const updatedUser = { ...persistedUser, ...user };
+    return await this.userRepository.save(updatedUser);
   }
 
   async delete(id: string) {

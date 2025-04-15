@@ -1,19 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsOptional, IsString, IsNotEmpty } from 'class-validator';
+
 export class UserDto {
+  @IsOptional() // Make it optional for updates
   @IsString()
   @IsNotEmpty()
-  readonly name: string;
+  readonly name?: string;
 
+  @IsOptional() // Make it optional for updates
   @IsString()
   @IsNotEmpty()
-  readonly description: string;
+  readonly description?: string;
 
+  @IsOptional() // Make it optional for updates
   @IsString()
   @IsNotEmpty()
-  readonly address: string;
+  readonly address?: string;
 
+  @IsOptional() // Make it optional for updates
   @IsString()
   @IsNotEmpty()
-  readonly city: string;
+  readonly city?: string;
 }

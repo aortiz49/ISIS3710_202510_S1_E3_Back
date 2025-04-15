@@ -16,7 +16,6 @@ import { UserEntity } from './user/user.entity';
       password: 'postgres',
       database: 'manitas',
       entities: [UserEntity],
-      dropSchema: true,
       synchronize: true,
     }),
   ],

@@ -77,6 +77,8 @@ describe('UserService', () => {
       description: faker.lorem.sentence(),
       address: faker.location.streetAddress(),
       city: faker.location.city(),
+      created_at: faker.date.past(),
+      updated_at: new Date(),
     };
 
     const newUser: UserEntity = await service.create(user);
