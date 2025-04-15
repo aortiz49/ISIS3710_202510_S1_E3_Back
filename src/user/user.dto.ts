@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsOptional, IsString, IsNotEmpty, MinLength } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsNotEmpty,
+  MinLength,
+  IsEmail,
+} from 'class-validator';
 
 export class UserDto {
   @IsOptional()
@@ -26,4 +32,13 @@ export class UserDto {
   @IsNotEmpty()
   @MinLength(6)
   readonly password: string;
+
+  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
+  readonly email: string;
+
+  @IsOptional()
+  @IsString()
+  readonly phone_number?: string;
 }

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Body,
   Controller,
@@ -40,9 +37,14 @@ export class UserController {
 
   @Post()
   async create(@Body() userDto: UserDto) {
-    const user: UserEntity = plainToInstance(UserEntity, userDto);
-
-    return await this.userService.create(user);
+    try {
+      console.log('Incoming DTO:', userDto); // 👀 See what's coming in
+      const user: UserEntity = plainToInstance(UserEntity, userDto);
+      return await this.userService.create(user);
+    } catch (error) {
+      console.error('Create user error:', error); // 🔥 Catch the real issue
+      throw error;
+    }
   }
 
   @Put(':userId')

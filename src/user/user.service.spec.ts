@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -30,7 +26,7 @@ describe('UserService', () => {
   });
 
   const seedDatabase = async () => {
-    repository.clear();
+    await repository.clear();
     usersList = [];
     for (let i = 0; i < 5; i++) {
       const user: UserEntity | null = await repository.save({

@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import {
   BusinessError,
   BusinessLogicException,
-} from '../shared/errors/business-errors';
+} from 'src/shared/errors/business-errors';
+import { DUPLICATE_KEY } from 'src/shared/errors/psql-errors';
 
 @Injectable()
 export class UserService {
@@ -45,8 +46,22 @@ export class UserService {
   }
 
   async create(user: Partial<UserEntity>): Promise<UserEntity> {
-    const newUser = this.userRepository.create(user);
-    return await this.userRepository.save(newUser);
+    try {
+      const newUser = this.userRepository.create(user);
+      return await this.userRepository.save(newUser);
+    } catch (error) {
+      if (
+        error instanceof QueryFailedError &&
+        (error as any).code === DUPLICATE_KEY
+      ) {
+        throw new BusinessLogicException(
+          'The user with the given email already exists',
+          BusinessError.BAD_REQUEST,
+        );
+      }
+
+      throw error;
+    }
   }
 
   async update(id: string, user: Partial<UserEntity>): Promise<UserEntity> {
