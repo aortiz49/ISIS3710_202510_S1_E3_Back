@@ -29,6 +29,7 @@ export class UpdateUserDto {
   @IsBoolean()
   service_provider?: boolean;
 
+  @IsOptional()
   @IsIn(['en', 'es'])
   interface_language?: 'en' | 'es';
 }

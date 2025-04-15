@@ -64,19 +64,22 @@ export class UserService {
     }
   }
 
-  async update(id: string, user: Partial<UserEntity>): Promise<UserEntity> {
-    const persistedUser = await this.userRepository.findOne({
-      where: { id },
-    });
+  async update(
+    id: string,
+    updateUserDto: Partial<UserEntity>,
+  ): Promise<UserEntity> {
+    const existingUser = await this.userRepository.findOneBy({ id });
 
-    if (!persistedUser) {
+    if (!existingUser) {
       throw new BusinessLogicException(
         'The user with the given id was not found',
         BusinessError.NOT_FOUND,
       );
     }
 
-    const updatedUser = { ...persistedUser, ...user };
+    // Merge the update fields into the existing user
+    const updatedUser = this.userRepository.merge(existingUser, updateUserDto);
+
     return await this.userRepository.save(updatedUser);
   }
 
