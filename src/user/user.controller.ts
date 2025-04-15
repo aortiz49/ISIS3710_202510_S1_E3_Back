@@ -36,7 +36,11 @@ export class UserController {
 
   @Post()
   async create(@Body() userDto: UserDto) {
+    const logger = new Logger('UserController'); // Logger for debugging
+
     const user: UserEntity = plainToInstance(UserEntity, userDto);
+    logger.error('User HELLOOOOOOO', user);
+
     return await this.userService.create(user);
   }
 
