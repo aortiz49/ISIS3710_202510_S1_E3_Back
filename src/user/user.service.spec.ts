@@ -82,6 +82,7 @@ describe('UserService', () => {
       last_seen_at: new Date(),
       phone_number: faker.phone.number(),
       admin: Math.random() < 0.5,
+      service_provider: Math.random() < 0.5,
     };
 
     const newUser: UserEntity = await service.create(user);

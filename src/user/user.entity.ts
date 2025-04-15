@@ -27,4 +27,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ default: false })
   admin: boolean;
+
+  @Column({ default: false })
+  service_provider: boolean;
 }
