@@ -41,6 +41,13 @@ export class UserEntity extends BaseEntity {
   @Column({ default: false })
   service_provider: boolean;
 
+  @Column({
+    type: 'enum',
+    enum: ['en', 'es'],
+    default: 'en',
+  })
+  interface_language: 'en' | 'es';
+
   @BeforeInsert()
   async hashPassword() {
     if (this.password) {

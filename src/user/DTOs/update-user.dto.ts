@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsBoolean } from 'class-validator';
+import { IsOptional, IsString, IsBoolean, IsIn } from 'class-validator';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -28,4 +28,7 @@ export class UpdateUserDto {
   @IsOptional()
   @IsBoolean()
   service_provider?: boolean;
+
+  @IsIn(['en', 'es'])
+  interface_language?: 'en' | 'es';
 }

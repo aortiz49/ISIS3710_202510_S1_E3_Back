@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsString,
   IsBoolean,
+  IsIn,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -41,4 +42,7 @@ export class CreateUserDto {
   @IsOptional()
   @IsBoolean()
   service_provider?: boolean;
+
+  @IsIn(['en', 'es'])
+  interface_language?: 'en' | 'es';
 }
