@@ -10,10 +10,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { UserDto } from './user.dto';
+import { CreateUserDto } from './DTOs/create-user.dto';
 import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-errors/business-errors.interceptor';
+import { UpdateUserDto } from './DTOs/update-user.dto';
 
 @Controller('users')
 @UseInterceptors(BusinessErrorsInterceptor)
@@ -36,7 +37,7 @@ export class UserController {
   }
 
   @Post()
-  async create(@Body() userDto: UserDto) {
+  async create(@Body() userDto: CreateUserDto) {
     try {
       console.log('Incoming DTO:', userDto); // 👀 See what's coming in
       const user: UserEntity = plainToInstance(UserEntity, userDto);
@@ -48,7 +49,10 @@ export class UserController {
   }
 
   @Put(':userId')
-  async updateUser(@Param('userId') id: string, @Body() userDto: UserDto) {
+  async updateUser(
+    @Param('userId') id: string,
+    @Body() userDto: UpdateUserDto,
+  ) {
     const existingUser = await this.userService.findOne(id);
     if (!existingUser) {
       throw new Error('User not found');
