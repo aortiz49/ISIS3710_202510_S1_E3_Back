@@ -5,21 +5,24 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Enable versioning
   app.enableVersioning({
     type: VersioningType.URI,
     prefix: 'api/v',
     defaultVersion: '1',
   });
 
+  // Apply global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // Strip properties without decorators
-      forbidNonWhitelisted: false, // Throw error on unknown props
-      forbidUnknownValues: false, // Prevents invalid DTO shapes
-      transform: true, // Auto-transform payloads to DTO instances
+      whitelist: true,
+      forbidNonWhitelisted: false,
+      forbidUnknownValues: false,
+      transform: true,
     }),
   );
 
   await app.listen(3000);
 }
+
 bootstrap();

@@ -55,7 +55,7 @@ export class UserService {
         (error as any).code === DUPLICATE_KEY
       ) {
         throw new BusinessLogicException(
-          'The user with the given email already exists',
+          'The user with the given email already existss!',
           BusinessError.BAD_REQUEST,
         );
       }

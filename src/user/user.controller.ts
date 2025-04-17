@@ -2,11 +2,14 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   HttpCode,
   Param,
   Post,
   Put,
+  Req,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
@@ -15,6 +18,11 @@ import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-errors/business-errors.interceptor';
 import { UpdateUserDto } from './DTOs/update-user.dto';
+import { JwtAuthGuard } from './auth/auth.guard';
+
+interface AuthenticatedRequest extends Request {
+  user: UserEntity;
+}
 
 @Controller('users')
 @UseInterceptors(BusinessErrorsInterceptor)
@@ -26,9 +34,20 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('id/:userId')
-  async findOneById(@Param('userId') userId: string) {
-    return await this.userService.findOne(userId);
+  async findOneById(
+    @Param('userId') userId: string,
+    @Req()
+    req: AuthenticatedRequest,
+  ) {
+    const user = req.user;
+
+    if (user.id !== userId) {
+      throw new ForbiddenException('You can only access your own profile');
+    }
+
+    return this.userService.findOne(userId);
   }
 
   @Get('email/:email')
@@ -38,14 +57,8 @@ export class UserController {
 
   @Post()
   async create(@Body() userDto: CreateUserDto) {
-    try {
-      console.log('Incoming DTO:', userDto); // 👀 See what's coming in
-      const user: UserEntity = plainToInstance(UserEntity, userDto);
-      return await this.userService.create(user);
-    } catch (error) {
-      console.error('Create user error:', error); // 🔥 Catch the real issue
-      throw error;
-    }
+    const user: UserEntity = plainToInstance(UserEntity, userDto);
+    return await this.userService.create(user);
   }
 
   @Put(':userId')
