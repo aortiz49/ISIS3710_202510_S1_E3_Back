@@ -3,6 +3,11 @@ import * as bcrypt from 'bcrypt';
 import { BaseEntity } from 'src/base-entity';
 import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 
+export enum InterfaceLanguage {
+  EN = 'en',
+  ES = 'es',
+}
+
 @Entity('users')
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -42,11 +47,11 @@ export class UserEntity extends BaseEntity {
   service_provider: boolean;
 
   @Column({
-    type: 'enum',
-    enum: ['en', 'es'],
-    default: 'en',
+    type: 'text',
+    nullable: true,
+    default: InterfaceLanguage.EN,
   })
-  interface_language: 'en' | 'es';
+  interface_language: InterfaceLanguage;
 
   @BeforeInsert()
   async hashPassword() {
