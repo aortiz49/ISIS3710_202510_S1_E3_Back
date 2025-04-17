@@ -1,16 +1,9 @@
-// src/auth/auth.service.ts
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user.service';
 import { UserEntity } from '../user.entity';
 import { CreateUserDto } from '../DTOs/create-user.dto';
 import { plainToInstance } from 'class-transformer';
-import { BusinessLogicException } from 'src/shared/errors/business-errors';
 import { DataSource } from 'typeorm';
 
 @Injectable()
