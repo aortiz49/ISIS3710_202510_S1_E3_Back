@@ -6,14 +6,11 @@ import {
   Get,
   HttpCode,
   Param,
-  Post,
   Put,
   Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { CreateUserDto } from './DTOs/create-user.dto';
 import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-errors/business-errors.interceptor';
@@ -53,12 +50,6 @@ export class UserController {
   @Get('email/:email')
   async findOneByEmail(@Param('email') email: string) {
     return await this.userService.findByEmail(email);
-  }
-
-  @Post()
-  async create(@Body() userDto: CreateUserDto) {
-    const user: UserEntity = plainToInstance(UserEntity, userDto);
-    return await this.userService.create(user);
   }
 
   @Put(':userId')

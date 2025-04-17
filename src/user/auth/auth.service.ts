@@ -21,9 +21,13 @@ export class AuthService {
 
     try {
       const user: UserEntity = plainToInstance(UserEntity, userDto);
-      const newUser = await queryRunner.manager.save(UserEntity, user);
-      const payload = { sub: newUser.email, name: newUser.name }; // Add any necessary info to the payload
+
+      // Pass the queryRunner to the create method so it uses the transaction
+      const newUser = await this.userService.create(user, queryRunner);
+
+      const payload = { sub: newUser.email, name: newUser.name };
       const token = this.jwtService.sign(payload);
+
       await queryRunner.commitTransaction();
 
       // Return the user and token

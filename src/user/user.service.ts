@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryFailedError, Repository } from 'typeorm';
+import { QueryFailedError, QueryRunner, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import {
   BusinessError,
   BusinessLogicException,
 } from 'src/shared/errors/business-errors';
-import { DUPLICATE_KEY } from 'src/shared/errors/psql-errors';
 
 @Injectable()
 export class UserService {
@@ -32,6 +31,30 @@ export class UserService {
     return user;
   }
 
+  async create(
+    user: Partial<UserEntity>,
+    queryRunner: QueryRunner,
+  ): Promise<UserEntity> {
+    try {
+      const newUser = queryRunner.manager.create(UserEntity, user);
+      return await queryRunner.manager.save(UserEntity, newUser);
+    } catch (error) {
+      // Check for duplicate email error
+      if (
+        error instanceof QueryFailedError &&
+        (error as any).code === '23505'
+      ) {
+        // For PostgreSQL Duplicate Key Error
+        console.log('Duplicate key error detected!');
+        throw new BusinessLogicException(
+          'The user with the given email already exists!',
+          BusinessError.BAD_REQUEST,
+        );
+      }
+      throw error; // Rethrow other errors if needed
+    }
+  }
+
   async findOne(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: { id },
@@ -43,25 +66,6 @@ export class UserService {
       );
 
     return user;
-  }
-
-  async create(user: Partial<UserEntity>): Promise<UserEntity> {
-    try {
-      const newUser = this.userRepository.create(user);
-      return await this.userRepository.save(newUser);
-    } catch (error) {
-      if (
-        error instanceof QueryFailedError &&
-        (error as any).code === DUPLICATE_KEY
-      ) {
-        throw new BusinessLogicException(
-          'The user with the given email already existss!',
-          BusinessError.BAD_REQUEST,
-        );
-      }
-
-      throw error;
-    }
   }
 
   async update(
