@@ -8,15 +8,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET || 'your-secret-key', // Ideally use process.env
+      secretOrKey: process.env.JWT_SECRET || 'your-secret-key',
     });
   }
 
   async validate(payload: any) {
-    const user = await this.userService.findByEmail(payload.sub); // Use user ID
+    const user = await this.userService.findOne(payload.sub);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-    return user; // This gets injected into `req.user`
+    return user;
   }
 }
